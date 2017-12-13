@@ -1,0 +1,13 @@
+{
+    "challonge" :{
+        "username":"RyanVile",
+        "api_key":"XXXXXXXX",
+        "tournament_url":"vw47j6lt"
+    },
+    "system" :{
+        "timezone":"EST"
+    },
+    "order" :{
+	"pool":"staggered"
+    }
+}
