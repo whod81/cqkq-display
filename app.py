@@ -1,8 +1,28 @@
 import asyncio
 import pickle
+
+# from apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.schedulers.background import BackgroundScheduler
 from flask import Flask, render_template, send_from_directory
 
 from utils.dashboard import get_results
+
+
+def poller():
+    """ Function for test purposes. """
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+
+    output = loop.run_until_complete(get_results(loop))
+
+    o = open('data.pkl', 'wb')
+
+    pickle.dump(output, o)
+
+
+sched = BackgroundScheduler(daemon=True)
+sched.add_job(poller, 'interval', minutes=1)
+sched.start()
 
 app = Flask(__name__, static_url_path='')
 
@@ -32,23 +52,15 @@ def send_js(path):
     return send_from_directory('js', path)
 
 
-@app.route('/poll')
-def poll(name=None):
-    loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
-
-    output = loop.run_until_complete(get_results(loop))
-
-    o = open('data.pkl', 'wb')
-
-    pickle.dump(output, o)
-    return render_template('index.html', name=name, output=output)
+# @app.route('/poll')
+# def poll(name=None):
+#
+#     return render_template('index.html', name=name, output=output)
 
 
 @app.route('/')
 @app.route('/<name>')
 def hello(name=None):
-
     o = open('data.pkl', 'rb')
     output = pickle.load(o)
 
