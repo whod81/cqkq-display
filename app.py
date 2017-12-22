@@ -4,7 +4,7 @@ import asyncio
 from flask import Flask, render_template, request, send_from_directory
 import challonge
 
-from dashboard import get_results
+from utils.dashboard import get_results
 
 
 app = Flask(__name__, static_url_path='')
