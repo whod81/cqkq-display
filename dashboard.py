@@ -1,16 +1,14 @@
 #!/usr/bin/python3
 
-import time
-import requests
-import logging
-import challonge
-import json
 import asyncio
-import pprint
 import datetime
+import json
+import time
+from operator import attrgetter
+
+import challonge
 import dateutil.parser
 from dateutil import tz
-from operator import attrgetter
 from pytz import timezone
 
 # Open the config file
@@ -22,6 +20,7 @@ my_username = config["challonge"]["username"]
 my_api_key = config["challonge"]["api_key"]
 tz = timezone('EST')
 
+
 # I would suggest collapsing all of the functions for maximum cleanliness
 ### FUNCTIONS ###
 
@@ -32,8 +31,8 @@ async def get_tourney():
 
     # Get Tournament Data
     t = await my_user.get_tournament(url=config["challonge"]["tournament_url"])
-    print("Tournament Name: ", t.name)
     return t
+
 
 # Gets either the started_at or start_at date string from tournament object
 # and returns parsed datetime object
@@ -44,8 +43,9 @@ def get_real_start(tournament):
         time = dateutil.parser.parse(tournament.started_at)
     elif (tournament.start_at):
         time = dateutil.parser.parse(tournament.start_at)
-    time = time.astimezone(tz) # This will convert time to local timezone! I think
+    time = time.astimezone(tz)  # This will convert time to local timezone! I think
     return time
+
 
 # Loop to check if tournament has started based on # of participants and start time.
 # Loop will break and return true after tournament has started
@@ -57,13 +57,14 @@ async def tournament_has_started(tournament):
         participants = await tournament.get_participants()
     return True
 
+
 async def get_last_completed_match_id(matches):
     # This isn't finished need to find the match that has newest completion time
     latest_completed_match = matches[0]
 
     for m in matches:
         if (m.completed_at is None):
-           continue
+            continue
         else:
             if (latest_completed_match.completed_at == None) or (latest_completed_match.completed_at < m.completed_at):
                 latest_completed_match = m
@@ -73,11 +74,12 @@ async def get_last_completed_match_id(matches):
     else:
         return latest_completed_match.id
 
+
 # Ryan's magic function. Returns the next match id in a staggered group scenario
 async def get_next_staggered_match_id(matches):
-    groups = []                # Still not sure what this is for. Holds groups for fun?
-    unplayed_per_group = {}    # Number of unplayed games per group will be stored in this
-    completion_time = {}       # Last completion time of each group will be stored in this
+    groups = []  # Still not sure what this is for. Holds groups for fun?
+    unplayed_per_group = {}  # Number of unplayed games per group will be stored in this
+    completion_time = {}  # Last completion time of each group will be stored in this
     for m in matches:
         # Totally not sure why this doesn't work, I hate python.  See my note
         # above about me not understanding classes
@@ -90,11 +92,11 @@ async def get_next_staggered_match_id(matches):
 
         # If we want our matches staggered between group stage pools I need to find the
         # pool that has the most unplayed matches
-        if (m.group_id  not in groups):
+        if (m.group_id not in groups):
             groups.append(m.group_id)
 
         if (m.completed_at is None):
-            unplayed_per_group[m.group_id] = unplayed_per_group.get(m.group_id,0) + 1
+            unplayed_per_group[m.group_id] = unplayed_per_group.get(m.group_id, 0) + 1
         else:
             # Again this python library doesn't bother switching the datetime to proper dt objects
             # Anyway what i'm doing here is getting the latest completion time per group
@@ -136,21 +138,19 @@ async def get_next_staggered_match_id(matches):
         # p.s. take a shot of whiskey if you don't understand this xsect
         # In medieval times, you would be burned for this kind of black magic
 
-
-        cross_section  = {k: v for k, v in completion_time.items() if k in need_more_games}
+        cross_section = {k: v for k, v in completion_time.items() if k in need_more_games}
 
         for group in sorted(need_more_games):
-           if completion_time.get(group) == None:
+            if completion_time.get(group) == None:
                 # Hey they have never finished a match in this pool we're great here
                 next_group = group
                 break
-           elif completion_time.get(group) == cross_section[min(cross_section)]:
+            elif completion_time.get(group) == cross_section[min(cross_section)]:
                 next_group = group
                 break
-           else:
-               print(min(cross_section),completion_time.get(group))
-               print("ERROR: Are we really getting here?")
-
+            else:
+                print(min(cross_section), completion_time.get(group))
+                print("ERROR: Are we really getting here?")
 
     # I know there's a shorthand for this
 
@@ -161,7 +161,8 @@ async def get_next_staggered_match_id(matches):
 
     next_match = min(next_group_matches)
     return next_match
-    #print("Next Match ID: ", next_match)
+    # print("Next Match ID: ", next_match)
+
 
 # Get next match in a non-staggered groups scenario
 def get_next_match(matches):
@@ -173,6 +174,7 @@ def get_next_match(matches):
 
     next_match = min(incomplete_matches, key=attrgetter('id'))
     return next_match
+
 
 # Get dictionary of team ids -> team names
 def get_participants_list(participants):
@@ -199,18 +201,21 @@ def get_participants_list(participants):
             return False
     return p_list
 
+
 ### END FUNCTIONS ###
 
-async def main(loop):
+async def get_results(loop):
+    output = []
     # Grab the tournament. See function above.
     t = await get_tourney()
+    output.append("Tournament Name: %s " % t.name)
 
     # Grab real start time and sets it to tournament dt property. See function above
     t.dt = get_real_start(t)
 
     # strftime is a function of datetime that sets format (in this example: YY/MM/DD, hh:mmAM/PM)
     # See strftime documentation here: http://strftime.org/
-    print("Tournament Start Time: ", t.dt.strftime('%x, %I:%M%p'))
+    output.append("Tournament Start Time: %s " % t.dt.strftime('%x, %I:%M%p'))
 
     # Run function to wait until tournament has started
     await tournament_has_started(t)
@@ -237,10 +242,11 @@ async def main(loop):
         last_match = await t.get_match(last_match)
         fake_date = dateutil.parser.parse(last_match.completed_at)
         fake_date = fake_date.astimezone(tz)
-        print("LAST MATCH: ", p_list[last_match.player1_id], " vs ", p_list[last_match.player2_id],last_match.completed_at)
+        output.append(
+            "LAST MATCH: %s %s %s %s " % (p_list[last_match.player1_id], " vs ", p_list[last_match.player2_id],
+                                          last_match.completed_at))
     else:
         fake_date = t.dt
-
 
     # If the pool is staggered, run Ryan's magic algorithm
     if (config["order"]["pool"] == "staggered"):
@@ -249,9 +255,9 @@ async def main(loop):
     else:
         next_match = get_next_match(t_matches)
 
-    print("UP NOW: ", p_list[next_match.player1_id], " vs ", p_list[next_match.player2_id])
+    output.append("UP NOW: %s %s %s" % (p_list[next_match.player1_id], " vs ", p_list[next_match.player2_id]))
 
-    for idx,v in enumerate(t_matches):
+    for idx, v in enumerate(t_matches):
         if v.id == next_match.id:
             t_matches[idx].completed_at = str(fake_date + datetime.timedelta(seconds=60))
 
@@ -261,9 +267,9 @@ async def main(loop):
     else:
         next_match = get_next_match(t_matches)
 
-    print("ON DECK: ", p_list[next_match.player1_id], " vs ", p_list[next_match.player2_id])
+    output.append("ON DECK: %s %s %s " % (p_list[next_match.player1_id], " vs ", p_list[next_match.player2_id]))
 
-    for idx,v in enumerate(t_matches):
+    for idx, v in enumerate(t_matches):
         if v.id == next_match.id:
             t_matches[idx].completed_at = str(fake_date + datetime.timedelta(seconds=120))
 
@@ -273,9 +279,9 @@ async def main(loop):
     else:
         next_match = get_next_match(t_matches)
 
-    print("IN THE HOLE: ", p_list[next_match.player1_id], " vs ", p_list[next_match.player2_id])
+    output.append("IN THE HOLE: %s %s %s" % (p_list[next_match.player1_id], " vs ", p_list[next_match.player2_id]))
 
-    for idx,v in enumerate(t_matches):
+    for idx, v in enumerate(t_matches):
         if v.id == next_match.id:
             t_matches[idx].completed_at = str(fake_date + datetime.timedelta(seconds=180))
 
@@ -285,11 +291,12 @@ async def main(loop):
     else:
         next_match = get_next_match(t_matches)
 
-    print("WAY DOWN IN THE HOLE: ", p_list[next_match.player1_id], " vs ", p_list[next_match.player2_id])
+    output.append("WAY DOWN IN THE HOLE: %s %s %s" % (p_list[next_match.player1_id], " vs ", p_list[next_match.player2_id]))
     # So we have all the logic for getting matches, getting the next match, tournament details,
     # and participants detail. Now what?
+    return output
 
 
 if __name__ == '__main__':
     loop = asyncio.get_event_loop()
-    loop.run_until_complete(main(loop))
+    loop.run_until_complete(get_results(loop))
