@@ -21,7 +21,7 @@ def poller():
 
 
 sched = BackgroundScheduler(daemon=True)
-sched.add_job(poller, 'interval', minutes=1)
+sched.add_job(poller, 'interval', seconds=5)
 sched.start()
 
 app = Flask(__name__, static_url_path='')
