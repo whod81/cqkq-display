@@ -27,6 +27,7 @@ sched.start()
 app = Flask(__name__, static_url_path='')
 
 
+
 @app.route('/css/<path:path>')
 def send_css(path):
     return send_from_directory('css', path)
@@ -64,7 +65,13 @@ def hello(name=None):
     o = open('data.pkl', 'rb')
     output = pickle.load(o)
 
-    return render_template('index.html', name=name, output=output)
+    return render_template('index.html', name=name, tournament=output['tournament'], matches=output['matches'])
+
+@app.errorhandler(500)
+def internal_error(error):
+
+    return render_template('error.html')
+
 
 
 if __name__ == '__main__':

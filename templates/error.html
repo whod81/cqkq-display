@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-
+    <meta http-equiv="refresh" content="5" >
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -30,27 +30,17 @@
 </head>
 
 <body>
-<b>  Tournament: </b><br/>
-Name:  {{tournament['name']}} <br/>
-Started At: {{tournament['started_at']}} <br/><br/>
+<BIG>
+  There has been an error or the tournament has not started.   Automatically refreshing in 10 seconds.
+</BIG>
+<p>Date/Time: <span id="datetime"></span></p>
 
-<b> Last Match: </b><br>
-Player 1: {{matches['last']['player1']}} <br/>
-Player 2: {{matches['last']['player2']}} <br/>
-Completed At: {{matches['last']['completed_at']}} <br/><br/>
+<script>
+var dt = new Date();
+document.getElementById("datetime").innerHTML = dt.toLocaleString();
+</script>
 
-<b> Current Match: </b><br>
-Player 1: {{matches['current']['player1']}} <br/>
-Player 2: {{matches['current']['player2']}} <br/>
-Started At: {{matches['current']['started_at']}} <br/><br/>
 
-<b> Up Next: </b><br>
-Player 1: {{matches['next']['player1']}} <br/>
-Player 2: {{matches['next']['player2']}} <br/><br/>
-
-<b>And Then: </b><br>
-Player 1: {{matches['next2']['player1']}} <br/>
-Player 2: {{matches['next2']['player2']}} <br/><br/>
 
 
 </body>
