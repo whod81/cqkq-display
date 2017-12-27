@@ -181,7 +181,6 @@ async def get_next_staggered_match_id(matches):
 
     groups.sort()
 
-    print(unplayed_per_group)
     if (len(unplayed_per_group) == 0):
         print("Okay we are done with groups now what?  Prepare for errors")
         return None
