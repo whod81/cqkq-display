@@ -40,6 +40,15 @@ async def get_tourney():
     t = await my_user.get_tournament(url=config["challonge"]["tournament_url"])
     return t
 
+# Correct a crappy string timezone to make it properly
+# a datetime object and also has a proper timezone
+
+def fix_date_string(date_string):
+    dt_obj = dateutil.parser.parse(date_string)
+    dt_obj = dt_obj.astimezone(tz)
+
+    return dt_obj
+
 
 # Gets either the started_at or start_at date string from tournament object
 # and returns parsed datetime object
@@ -49,18 +58,17 @@ def get_real_start(tournament, matches):
     # so the news here is that
 
     if (tournament.started_at):
-        time = dateutil.parser.parse(tournament.started_at)
+        time = fix_date_string(tournament.started_at)
     elif (tournament.start_at):
-        time = dateutil.parser.parse(tournament.start_at)
+        time = fix_date_string(tournament.start_at)
 
     elif (len(matches) > 1 and matches[0].underway_at):
-        time = dateutil.parser.parse(matches[0].underway_at)
+        time = fix_date_string(matches[0].underway_at)
     elif (len(matches) > 1 and matches[0].started_at):
-        time = dateutil.parser.parse(matches[0].started_at)
+        time = fix_date_string(matches[0].started_at)
 
     else:
         return False
-    time = time.astimezone(tz)  # This will convert time to local timezone! I think
     return time
 
 
@@ -124,6 +132,9 @@ async def get_last_completed_match_id(matches):
         return latest_completed_match.id
 
 # Find out if any match has started but not finished
+# this could be by using the "start match" button in challonge
+# this is a good way to override what this script THINKS is the current match.
+# Just hit start on the actual current match.
 async def get_current_match_id(matches):
     started_matches = {}
     for m in matches:
@@ -162,7 +173,7 @@ async def get_next_staggered_match_id(matches):
             # Again this python library doesn't bother switching the datetime to proper dt objects
             # Anyway what i'm doing here is getting the latest completion time per group
             # using it later
-            cat_dt = dateutil.parser.parse(m.completed_at)
+            cat_dt = fix_date_string(m.completed_at)
             if (completion_time.get(m.group_id) == None) or (completion_time.get(m.group_id) < cat_dt):
                 completion_time[m.group_id] = cat_dt
 
@@ -316,8 +327,7 @@ async def get_results(loop):
 
     if (last_match != False):
         last_match = await t.get_match(last_match)
-        fake_date = dateutil.parser.parse(last_match.completed_at)
-        fake_date = fake_date.astimezone(tz)
+        fake_date = fix_date_string(last_match.completed_at)
         output["matches"]["last"]["id"] = last_match.id
         output["matches"]["last"]["player1"] = p_list[last_match.player1_id]
         output["matches"]["last"]["player2"] = p_list[last_match.player2_id]
@@ -346,9 +356,10 @@ async def get_results(loop):
     output["matches"]["current"]["player2"] = p_list[next_match.player2_id]
     # Okay so if someone clicked the "start" in Challonge use that, else use the completed of the last matches
     if next_match.underway_at != None:
-        output["matches"]["current"]["started_at"] = dateutil.parser.parse(next_match.underway_at)
+        output["matches"]["current"]["started_at"] = fix_date_string(next_match.underway_at)
     elif next_match.started_at != None:
-        output["matches"]["current"]["started_at"] = dateutil.parser.parse(next_match.started_at)
+        output["matches"]["current"]["started_at"] = fix_date_string(next_match.started_at)
+
     else:
         output["matches"]["current"]["started_at"] = fake_date
 
