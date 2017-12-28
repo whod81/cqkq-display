@@ -338,11 +338,25 @@ async def get_results(loop):
         fake_date = t.dt
 
     # If the pool is staggered, run Ryan's magic algorithm
+    # Okay I am sorry that these blocks are a giant (winter) cluster f***
+    # but basically if there IS no next match, I have to do setup a fake environemnt
+    # to keep on trucking.  And I have to do this in each block that is almost
+    # identical
     if (config["order"]["pool"] == "staggered"):
-        current_match = await get_current_match_id(t_matches)
-        if (current_match == None):
-            next_match = await get_next_staggered_match_id(t_matches)
-            next_match = await t.get_match(next_match)
+        current_match_id = await get_current_match_id(t_matches)
+        if (current_match_id == None):
+            next_match_id = await get_next_staggered_match_id(t_matches)
+            if next_match_id != None:
+                next_match = await t.get_match(next_match_id)
+                output["matches"]["current"]["id"] = next_match.id
+                output["matches"]["current"]["player1"] = p_list[next_match.player1_id]
+                output["matches"]["current"]["player2"] = p_list[next_match.player2_id]
+
+            else:
+                output["matches"]["current"]["id"] = None
+                output["matches"]["current"]["player1"] = ''
+                output["matches"]["current"]["player2"] = ''
+
         else:
             next_match = await t.get_match(current_match)
     else:
@@ -362,52 +376,81 @@ async def get_results(loop):
     else:
         output["matches"]["current"]["started_at"] = fake_date
 
-
     for idx, v in enumerate(t_matches):
         if v.id == next_match.id:
             t_matches[idx].completed_at = str(fake_date + datetime.timedelta(seconds=60))
 
     if (config["order"]["pool"] == "staggered"):
-        next_match = await get_next_staggered_match_id(t_matches)
-        next_match = await t.get_match(next_match)
+        next_match_id = await get_next_staggered_match_id(t_matches)
+        if next_match_id != None:
+            next_match = await t.get_match(next_match_id)
+            output["matches"]["next"]["id"] = next_match.id
+            output["matches"]["next"]["player1"] = p_list[next_match.player1_id]
+            output["matches"]["next"]["player2"] = p_list[next_match.player2_id]
+        else:
+            output["matches"]["next2"]["id"] = None
+            output["matches"]["next2"]["player1"] = ''
+            output["matches"]["next2"]["player2"] = ''
+
     else:
         next_match = get_next_match(t_matches)
 
-    # output.append("ON DECK: %s %s %s " % (p_list[next_match.player1_id], " vs ", p_list[next_match.player2_id]))
-    output["matches"]["next"]["id"] = next_match.id
-    output["matches"]["next"]["player1"] = p_list[next_match.player1_id]
-    output["matches"]["next"]["player2"] = p_list[next_match.player2_id]
+
 
     for idx, v in enumerate(t_matches):
         if v.id == next_match.id:
             t_matches[idx].completed_at = str(fake_date + datetime.timedelta(seconds=120))
 
     if (config["order"]["pool"] == "staggered"):
-        next_match = await get_next_staggered_match_id(t_matches)
-        next_match = await t.get_match(next_match)
+        next_match_id = await get_next_staggered_match_id(t_matches)
+        if next_match_id != None:
+            next_match = await t.get_match(next_match_id)
+            output["matches"]["next2"]["id"] = next_match.id
+            output["matches"]["next2"]["player1"] = p_list[next_match.player1_id]
+            output["matches"]["next2"]["player2"] = p_list[next_match.player2_id]
+        else:
+            output["matches"]["next2"]["id"] = None
+            output["matches"]["next2"]["player1"] = ''
+            output["matches"]["next2"]["player2"] = ''
+
     else:
-        next_match = get_next_match(t_matches)
-
-    # output.append("IN THE HOLE: %s %s %s" % (p_list[next_match.player1_id], " vs ", p_list[next_match.player2_id]))
-    output["matches"]["next2"]["id"] = next_match.id
-    output["matches"]["next2"]["player1"] = p_list[next_match.player1_id]
-    output["matches"]["next2"]["player2"] = p_list[next_match.player2_id]
-
+        try:
+            next_match = get_next_match(t_matches)
+            output["matches"]["next2"]["id"] = next_match.id
+            output["matches"]["next2"]["player1"] = p_list[next_match.player1_id]
+            output["matches"]["next2"]["player2"] = p_list[next_match.player2_id]
+        except:
+            output["matches"]["next2"]["id"] = None
+            output["matches"]["next2"]["player1"] = ''
+            output["matches"]["next2"]["player2"] = ''
 
     for idx, v in enumerate(t_matches):
         if v.id == next_match.id:
             t_matches[idx].completed_at = str(fake_date + datetime.timedelta(seconds=180))
 
     if (config["order"]["pool"] == "staggered"):
-        next_match = await get_next_staggered_match_id(t_matches)
-        next_match = await t.get_match(next_match)
+        next_match_id = await get_next_staggered_match_id(t_matches)
+        if next_match_id != None:
+            next_match = await t.get_match(next_match_id)
+            output["matches"]["next3"]["id"] = next_match.id
+            output["matches"]["next3"]["player1"] = p_list[next_match.player1_id]
+            output["matches"]["next3"]["player2"] = p_list[next_match.player2_id]
+        else:
+            output["matches"]["next3"]["id"] = None
+            output["matches"]["next3"]["player1"] = ''
+            output["matches"]["next3"]["player2"] = ''
     else:
-        next_match = get_next_match(t_matches)
+        try:
+            next_match = get_next_match(t_matches)
+            output["matches"]["next3"]["id"] = next_match.id
+            output["matches"]["next3"]["player1"] = p_list[next_match.player1_id]
+            output["matches"]["next3"]["player2"] = p_list[next_match.player2_id]
+        except:
+            output["matches"]["next3"]["id"] = None
+            output["matches"]["next3"]["player1"] = ''
+            output["matches"]["next3"]["player2"] = ''
 
-    # output.append("WAY DOWN IN THE HOLE: %s %s %s" % (p_list[next_match.player1_id], " vs ", p_list[next_match.player2_id]))
-    output["matches"]["next3"]["id"] = next_match.id
-    output["matches"]["next3"]["player1"] = p_list[next_match.player1_id]
-    output["matches"]["next3"]["player2"] = p_list[next_match.player2_id]
+
 
     # So we have all the logic for getting matches, getting the next match, tournament details,
     # and participants detail. Now what?
