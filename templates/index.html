@@ -1,61 +1,78 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-
-<head>
-
+  <head>
+    <!-- Required meta tags -->
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="shortcut icon" href="img/favicon.ico">
-    <title>On deck</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <!-- Bootstrap Core CSS -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
 
-    <!-- Custom CSS -->
-    <link href="css/modern-business.css" rel="stylesheet">
+    <script src="js/utils.js" type="text/javascript">
+    </script>
 
-    <!-- Custom Fonts -->
-    <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <title>{{tournament['name']}}</title>
+  </head>
 
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
 
-</head>
 
-<body>
-<b>  Tournament: </b><br/>
-Name:  {{tournament['name']}} <br/>
+
+
+<body class="bg-dark text-light">
+<div class="media">
+  <img class="align-self-start mr-3" src="img/cq_logo_sm.png" alt="CQ Logo">
+  <div class="media-body ">
+    <h5 class="mt-0 text-warning">Close Quarters</h5>
+  </div>
+</div>
+
+
+<div class=container>
+  <div class="row">
+    <div class="col">
+      <div class="text-right">Playing Now</div>
+    </div>
+    <div class="col">
+      <div style="color:yellow">{{matches['current']['player1']}} </div>
+      <div style="color:blue">{{matches['current']['player2']}} <br/>
+    </div>
+  </div>
+</div>
+<div class=container>
+  <div class="row">
+    <div class="col">
+      <div class="text-right">Up Next</div>
+    </div>
+    <div class="col">
+      <div style="color:yellow">{{matches['next']['player1']}} </div>
+      <div style="color:blue">{{matches['next']['player2']}} <br/>
+    </div>
+  </div>
+</div>
+<div class=container>
+  <div class="row">
+    <div class="col">
+      <div class="text-right">And Then</div>
+    </div>
+    <div class="col">
+      <div style="color:yellow">{{matches['next2']['player1']}} </div>
+      <div style="color:blue">{{matches['next2']['player2']}} <br/>
+    </div>
+  </div>
+</div>
+
+
+
+Tournament:  {{tournament['name']}} <br/>
 Started At: {{tournament['started_at']}} <br/><br/>
+Current Time: <div id="time"> </time>
 
-<b> Last Match: </b><br>
-Player 1: {{matches['last']['player1']}} <br/>
-Player 2: {{matches['last']['player2']}} <br/>
-Completed At: {{matches['last']['completed_at']}} <br/><br/>
 
-<b> Current Match: </b><br>
-Player 1: {{matches['current']['player1']}} <br/>
-Player 2: {{matches['current']['player2']}} <br/>
-Started At: {{matches['current']['started_at']}} <br/><br/>
-
-<b> Up Next: </b><br>
-Player 1: {{matches['next']['player1']}} <br/>
-Player 2: {{matches['next']['player2']}} <br/><br/>
-
-<b>And Then: </b><br>
-Player 1: {{matches['next2']['player1']}} <br/>
-Player 2: {{matches['next2']['player2']}} <br/><br/>
-
-<b>And Then: </b><br>
-Player 1: {{matches['next3']['player1']}} <br/>
-Player 2: {{matches['next3']['player2']}} <br/><br/>
-
+<!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js" integrity="sha384-a5N7Y/aK3qNeh15eJKGWxsqtnX/wWdSZSKp+81YjTmS15nvnvxKHuzaWwXHDli+4" crossorigin="anonymous"></script>
 </body>
 
 </html>

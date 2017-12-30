@@ -358,7 +358,7 @@ async def get_results(loop):
                 output["matches"]["current"]["player2"] = ''
 
         else:
-            next_match = await t.get_match(current_match)
+            next_match = await t.get_match(current_match_id)
     else:
         next_match = get_next_match(t_matches)
 
