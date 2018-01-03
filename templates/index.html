@@ -65,7 +65,14 @@
 
 Tournament:  {{tournament['name']}} <br/>
 Started At: {{tournament['started_at']}} <br/><br/>
-Current Time: <div id="time"> </time>
+
+Current Time: <div id="datetime"> </time>
+<script>
+var dt = new Date();
+document.getElementById("datetime").innerHTML = dt.toLocaleString();
+</script>
+
+
 
 
 <!-- Optional JavaScript -->

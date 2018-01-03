@@ -18,6 +18,7 @@ except OSError:
     pass
 
 
+
 # Open the config file
 with open('config.json') as json_data_file:
     config = json.load(json_data_file)
@@ -25,7 +26,8 @@ with open('config.json') as json_data_file:
 # set username, api key, and timezone from config.json
 my_username = config["challonge"]["username"]
 my_api_key = config["challonge"]["api_key"]
-tz = timezone('EST')
+tz = timezone(config["system"]["timezone"])
+
 
 
 # I would suggest collapsing all of the functions for maximum cleanliness
@@ -182,7 +184,6 @@ async def get_next_staggered_match_id(matches):
     groups.sort()
 
     if (len(unplayed_per_group) == 0):
-        print("Okay we are done with groups now what?  Prepare for errors")
         return None
 
     # python max returns a single entry if there is a tie -- need to find
@@ -286,8 +287,9 @@ async def get_results(loop):
     # Grab the tournament. See function above.
     t = await get_tourney()
     output["tournament"]["name"] = t.name
-    # output.append("Tournament Name: %s " % t.name)
 
+    # I might use this at some point
+    completed = False
 
     # Get all them matches -- yes its early in the process but i need this info
     t_matches = await t.get_matches()
@@ -301,7 +303,6 @@ async def get_results(loop):
     # strftime is a function of datetime that sets format (in this example: YY/MM/DD, hh:mmAM/PM)
     # See strftime documentation here: http://strftime.org/
     output["tournament"]["started_at"] = t.dt
-    # output.append("Tournament Start Time: %s " % t.dt.strftime('%x, %I:%M%p'))
 
 
 
@@ -331,9 +332,6 @@ async def get_results(loop):
         output["matches"]["last"]["player1"] = p_list[last_match.player1_id]
         output["matches"]["last"]["player2"] = p_list[last_match.player2_id]
         output["matches"]["last"]["completed_at"] = fake_date
-        #output.append(
-        #    "LAST MATCH: %s %s %s %s " % (p_list[last_match.player1_id], " vs ", p_list[last_match.player2_id],
-        #                                  last_match.completed_at))
     else:
         fake_date = t.dt
 
@@ -353,32 +351,43 @@ async def get_results(loop):
                 output["matches"]["current"]["player2"] = p_list[next_match.player2_id]
 
             else:
+                # I think this means tournament is completed_at
+                print("Tournament Completed")
+                completed = True
                 output["matches"]["current"]["id"] = None
                 output["matches"]["current"]["player1"] = ''
                 output["matches"]["current"]["player2"] = ''
 
         else:
-            next_match = await t.get_match(current_match_id)
+            next_match = await t.get_match(current_match)
     else:
         next_match = get_next_match(t_matches)
 
+    if completed != True:
+        output["matches"]["current"]["id"] = next_match.id
+        output["matches"]["current"]["player1"] = p_list[next_match.player1_id]
+        output["matches"]["current"]["player2"] = p_list[next_match.player2_id]
+    else:
+        output["matches"]["current"]["id"] = None
+        output["matches"]["current"]["player1"] = ''
+        output["matches"]["current"]["player2"] = ''
 
-    # output.append("UP NOW: %s %s %s" % (p_list[next_match.player1_id], " vs ", p_list[next_match.player2_id]))
-    output["matches"]["current"]["id"] = next_match.id
-    output["matches"]["current"]["player1"] = p_list[next_match.player1_id]
-    output["matches"]["current"]["player2"] = p_list[next_match.player2_id]
+
+
     # Okay so if someone clicked the "start" in Challonge use that, else use the completed of the last matches
-    if next_match.underway_at != None:
+    if next_match_id == None:
+        output["matches"]["current"]["started_at"] = fake_date
+    elif next_match.underway_at != None:
         output["matches"]["current"]["started_at"] = fix_date_string(next_match.underway_at)
     elif next_match.started_at != None:
         output["matches"]["current"]["started_at"] = fix_date_string(next_match.started_at)
-
     else:
         output["matches"]["current"]["started_at"] = fake_date
 
-    for idx, v in enumerate(t_matches):
-        if v.id == next_match.id:
-            t_matches[idx].completed_at = str(fake_date + datetime.timedelta(seconds=60))
+    if next_match_id != None:
+        for idx, v in enumerate(t_matches):
+            if v.id == next_match.id:
+                t_matches[idx].completed_at = str(fake_date + datetime.timedelta(seconds=60))
 
     if (config["order"]["pool"] == "staggered"):
         next_match_id = await get_next_staggered_match_id(t_matches)
@@ -396,10 +405,10 @@ async def get_results(loop):
         next_match = get_next_match(t_matches)
 
 
-
-    for idx, v in enumerate(t_matches):
-        if v.id == next_match.id:
-            t_matches[idx].completed_at = str(fake_date + datetime.timedelta(seconds=120))
+    if next_match_id != None:
+        for idx, v in enumerate(t_matches):
+            if v.id == next_match.id:
+                t_matches[idx].completed_at = str(fake_date + datetime.timedelta(seconds=120))
 
     if (config["order"]["pool"] == "staggered"):
         next_match_id = await get_next_staggered_match_id(t_matches)
@@ -424,9 +433,10 @@ async def get_results(loop):
             output["matches"]["next2"]["player1"] = ''
             output["matches"]["next2"]["player2"] = ''
 
-    for idx, v in enumerate(t_matches):
-        if v.id == next_match.id:
-            t_matches[idx].completed_at = str(fake_date + datetime.timedelta(seconds=180))
+    if next_match_id != None:
+        for idx, v in enumerate(t_matches):
+            if v.id == next_match.id:
+                t_matches[idx].completed_at = str(fake_date + datetime.timedelta(seconds=180))
 
     if (config["order"]["pool"] == "staggered"):
         next_match_id = await get_next_staggered_match_id(t_matches)
