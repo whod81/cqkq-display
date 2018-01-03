@@ -18,10 +18,14 @@ except OSError:
     pass
 
 
+def get_config():
+    # Open the config file
+    with open('config.json') as json_data_file:
+        config = json.load(json_data_file)
+    return config
 
-# Open the config file
-with open('config.json') as json_data_file:
-    config = json.load(json_data_file)
+
+config = get_config()
 
 # set username, api key, and timezone from config.json
 my_username = config["challonge"]["username"]
@@ -30,11 +34,28 @@ tz = timezone(config["system"]["timezone"])
 
 
 
+
 # I would suggest collapsing all of the functions for maximum cleanliness
 ### FUNCTIONS ###
 
+
+
+
 # Grabs tournament, and handles all parameters to keep main loop clean
+
+
+
 async def get_tourney():
+    # Re-reading the configuration file so you can make changes without restarting
+    # This makes it easier to re-point at a different tournament_url
+
+    config = get_config()
+
+    # set username, api key, and timezone from config.json
+    my_username = config["challonge"]["username"]
+    my_api_key = config["challonge"]["api_key"]
+
+
     # Initiate Connection to CO
     my_user = await challonge.get_user(my_username, my_api_key)
 
@@ -279,6 +300,7 @@ def get_participants_list(participants):
 ### END FUNCTIONS ###
 
 async def get_results(loop):
+
     # Okay this is so stupid at this point this was the original logic which was very function heavy
     # cuz i was the only one working on it but now its just painful.
 
@@ -315,8 +337,7 @@ async def get_results(loop):
     participants = await t.get_participants()
     p_list = get_participants_list(participants)
 
-    next_match = None
-
+    next_match_id = None
     last_match = await get_last_completed_match_id(t_matches)
 
     # okay i know this is stupid but if i didn't give a fake date on the matches as i re-iterated
@@ -357,17 +378,16 @@ async def get_results(loop):
                 output["matches"]["current"]["id"] = None
                 output["matches"]["current"]["player1"] = ''
                 output["matches"]["current"]["player2"] = ''
-
         else:
-            next_match = await t.get_match(current_match)
+            next_match_id = current_match_id
+            next_match = await t.get_match(next_match_id)
+            output["matches"]["current"]["id"] = next_match.id
+            output["matches"]["current"]["player1"] = p_list[next_match.player1_id]
+            output["matches"]["current"]["player2"] = p_list[next_match.player2_id]
     else:
         next_match = get_next_match(t_matches)
 
-    if completed != True:
-        output["matches"]["current"]["id"] = next_match.id
-        output["matches"]["current"]["player1"] = p_list[next_match.player1_id]
-        output["matches"]["current"]["player2"] = p_list[next_match.player2_id]
-    else:
+    if completed == True:
         output["matches"]["current"]["id"] = None
         output["matches"]["current"]["player1"] = ''
         output["matches"]["current"]["player2"] = ''
