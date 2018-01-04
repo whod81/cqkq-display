@@ -275,6 +275,10 @@ def get_next_match(matches):
 def get_participants_list(participants):
     p_list = {}
 
+    if len(participants) < 1:
+        print("Tournament has no participants.  It probably hasn't started.")
+        return False
+
     for p in participants:
 
         # CO has decided that the participant id does not line up
@@ -286,14 +290,19 @@ def get_participants_list(participants):
         # on a player level and just tracking a team
 
         # group_id does not work as expected -- it is set to None. Thanks Obama
+
+
+
         if (p.group_id):
             print("DEBUG: something has changed", p.group_id)
         elif (len(p.group_player_ids) >= 1):
             p_list[p.group_player_ids[0]] = p.name
         else:
             # This is where you end up if the tournament hasn't started
-            print("DUC SAYS 'ERROR' (tournament probably hasn't started) ")
-            return False
+
+            p_list[p.id] = p.name
+
+
     return p_list
 
 
@@ -335,6 +344,7 @@ async def get_results(loop):
     # and the values are the names of the team.  Useful for quickly finding team names based on
     # match values
     participants = await t.get_participants()
+
     p_list = get_participants_list(participants)
 
     next_match_id = None
@@ -414,8 +424,15 @@ async def get_results(loop):
         if next_match_id != None:
             next_match = await t.get_match(next_match_id)
             output["matches"]["next"]["id"] = next_match.id
-            output["matches"]["next"]["player1"] = p_list[next_match.player1_id]
-            output["matches"]["next"]["player2"] = p_list[next_match.player2_id]
+            if next_match.player1_id is None:
+                output["matches"]["next"]["player1"] = 'TBD'
+            else:
+                output["matches"]["next"]["player1"] = p_list[next_match.player1_id]
+
+            if next_match.player2_id is None:
+                output["matches"]["next"]["player2"] = 'TBD'
+            else:
+                output["matches"]["next"]["player2"] = p_list[next_match.player2_id]
         else:
             output["matches"]["next2"]["id"] = None
             output["matches"]["next2"]["player1"] = ''
@@ -435,8 +452,16 @@ async def get_results(loop):
         if next_match_id != None:
             next_match = await t.get_match(next_match_id)
             output["matches"]["next2"]["id"] = next_match.id
-            output["matches"]["next2"]["player1"] = p_list[next_match.player1_id]
-            output["matches"]["next2"]["player2"] = p_list[next_match.player2_id]
+            if next_match.player1_id is None:
+                output["matches"]["next2"]["player1"] = 'TBD'
+            else:
+                output["matches"]["next2"]["player1"] = p_list[next_match.player1_id]
+
+            if next_match.player2_id is None:
+                output["matches"]["next2"]["player2"] = 'TBD'
+            else:
+                output["matches"]["next2"]["player2"] = p_list[next_match.player2_id]
+
         else:
             output["matches"]["next2"]["id"] = None
             output["matches"]["next2"]["player1"] = ''
@@ -446,8 +471,16 @@ async def get_results(loop):
         try:
             next_match = get_next_match(t_matches)
             output["matches"]["next2"]["id"] = next_match.id
-            output["matches"]["next2"]["player1"] = p_list[next_match.player1_id]
-            output["matches"]["next2"]["player2"] = p_list[next_match.player2_id]
+            if next_match.player1_id is None:
+                output["matches"]["next2"]["player1"] = 'TBD'
+            else:
+                output["matches"]["next2"]["player1"] = p_list[next_match.player1_id]
+
+            if next_match.player2_id is None:
+                output["matches"]["next2"]["player2"] = 'TBD'
+            else:
+                output["matches"]["next2"]["player2"] = p_list[next_match.player2_id]
+
         except:
             output["matches"]["next2"]["id"] = None
             output["matches"]["next2"]["player1"] = ''
@@ -463,8 +496,15 @@ async def get_results(loop):
         if next_match_id != None:
             next_match = await t.get_match(next_match_id)
             output["matches"]["next3"]["id"] = next_match.id
-            output["matches"]["next3"]["player1"] = p_list[next_match.player1_id]
-            output["matches"]["next3"]["player2"] = p_list[next_match.player2_id]
+            if next_match.player1_id is None:
+                output["matches"]["next3"]["player1"] = 'TBD'
+            else:
+                output["matches"]["next3"]["player1"] = p_list[next_match.player1_id]
+
+            if next_match.player2_id is None:
+                output["matches"]["next3"]["player2"] = 'TBD'
+            else:
+                output["matches"]["next3"]["player2"] = p_list[next_match.player2_id]
         else:
             output["matches"]["next3"]["id"] = None
             output["matches"]["next3"]["player1"] = ''
@@ -473,8 +513,15 @@ async def get_results(loop):
         try:
             next_match = get_next_match(t_matches)
             output["matches"]["next3"]["id"] = next_match.id
-            output["matches"]["next3"]["player1"] = p_list[next_match.player1_id]
-            output["matches"]["next3"]["player2"] = p_list[next_match.player2_id]
+            if next_match.player1_id is None:
+                output["matches"]["next3"]["player1"] = 'TBD'
+            else:
+                output["matches"]["next3"]["player1"] = p_list[next_match.player1_id]
+
+            if next_match.player2_id is None:
+                output["matches"]["next3"]["player2"] = 'TBD'
+            else:
+                output["matches"]["next3"]["player2"] = p_list[next_match.player2_id]
         except:
             output["matches"]["next3"]["id"] = None
             output["matches"]["next3"]["player1"] = ''
