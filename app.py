@@ -60,19 +60,51 @@ def send_js(path):
 
 
 @app.route('/')
-@app.route('/<name>')
 def hello(name=None):
     o = open('data.pkl', 'rb')
     output = pickle.load(o)
 
     return render_template('index.html', name=name, tournament=output['tournament'], matches=output['matches'])
 
-@app.errorhandler(500)
-def internal_error(error):
+@app.route('/player/<match>/<player>')
+def print_player(match, player):
+    o = open('data.pkl', 'rb')
+    output = pickle.load(o)
 
-    return render_template('error.html')
+    if match == "current":
+        if player == '1':
+            player_name = output['matches']['current']['player1']
+        elif player == '2':
+            player_name = output['matches']['current']['player2']
+    elif match == "next":
+        if player == '1':
+            player_name = output['matches']['next']['player1']
+        elif player == '2':
+            player_name = output['matches']['next']['player2']
+    elif match == "next2":
+        if player == '1':
+            player_name = output['matches']['next2']['player1']
+        elif player == '2':
+            player_name = output['matches']['next2']['player2']
+    elif match == "next3":
+        if player == '1':
+            player_name = output['matches']['next3']['player1']
+        elif player == '2':
+            player_name = output['matches']['next3']['player2']
+    else:
+        player_name = "ERROR"
+
+    return render_template('player.html', player=player, player_name=player_name)
+
+
+
+
+
+#@app.errorhandler(500)
+#def internal_error(error):
+#    return render_template('error.html')
 
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0')
+    app.run(host='0.0.0.0',debug=True)
