@@ -1,7 +1,7 @@
 body {
     font-family: 'Lato', cursive;
     font-size: 120%;
-    background-color: #2d2d2d;
+    background-color: #1d1d1d;
 }
 
 .top-of-screen {
@@ -36,9 +36,9 @@ body {
 }
 
 .team1 {
-    color: #aec7e1
+    color: #bed7f1
 }
 
 .team2 {
-    color: #03468b
+    color: #2366Ab
 }

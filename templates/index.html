@@ -33,22 +33,29 @@
         <tr>
           <td class="tabletitle">Playing Now</td>
           <td class="tablematches">
-            <span class="team2">{{matches['current']['player2']}}</span><br/>
-            <span class="team1">{{matches['current']['player1']}}</span>
+            <span class="team2">{{matches['current']['player1']}}</span><br/>
+            <span class="team1">{{matches['current']['player2']}}</span>
           </td>
         </tr>
         <tr>
-          <td class="tabletitle">Up Next</td>
+          <td class="tabletitle">On Deck</td>
           <td class="tablematches">
             <span class="team2">{{matches['next']['player1']}}</span><br/>
             <span class="team1">{{matches['next']['player2']}}</span>
           </td>
         </tr>
         <tr>
-          <td class="tabletitle">After that</td>
+          <td class="tabletitle">In the Hole</td>
           <td class="tablematches">
             <span class="team2">{{matches['next2']['player1']}}</span><br/>
             <span class="team1">{{matches['next2']['player2']}}</span>
+          </td>
+        </tr>
+        <tr>
+          <td class="tabletitle">Down in the Hole</td>
+          <td class="tablematches">
+            <span class="team2">{{matches['next3']['player1']}}</span><br/>
+            <span class="team1">{{matches['next3']['player2']}}</span>
           </td>
         </tr>
       </table><!-- End games coming up table -->

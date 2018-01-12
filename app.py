@@ -97,12 +97,19 @@ def print_player(match, player):
     return render_template('player.html', player=player, player_name=player_name)
 
 
+@app.after_request
+def add_header(response):
+    """
+    Add headers to both force latest IE rendering engine or Chrome Frame,
+    and also to cache the rendered page for 10 minutes.
+    """
+    response.headers['X-UA-Compatible'] = 'IE=Edge,chrome=1'
+    response.headers['Cache-Control'] = 'public, max-age=60'
+    return response
 
-
-
-#@app.errorhandler(500)
-#def internal_error(error):
-#    return render_template('error.html')
+@app.errorhandler(500)
+def internal_error(error):
+    return render_template('error.html')
 
 
 
