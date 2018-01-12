@@ -1,91 +1,83 @@
 <!doctype html>
 <html lang="en">
-  <head>
+<head>
+  <!-- refresh -->
+  <meta http-equiv="refresh" content="5" >
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
+  
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="/css/custom.css">
 
-    <!-- refresh -->
-    <meta http-equiv="refresh" content="5" >
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-    <meta http-equiv="Pragma" content="no-cache" />
-    <meta http-equiv="Expires" content="0" />
+  <!-- Google fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet"> 
 
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>{{tournament['name']}}</title>
+</head>
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
-
-    </script>
-
-    <title>{{tournament['name']}}</title>
-  </head>
-
-
-
-
-
-<body class="bg-dark text-light">
-<div class="media">
-  <img class="align-self-start mr-3" src="/kq/img/cq_logo_sm.png" alt="CQ Logo">
-  <div class="media-body ">
-    <h5 class="mt-0 text-warning">Close Quarters</h5>
-  </div>
-</div>
-
-
-<div class=container>
-  <div class="row">
-    <div class="col">
-      <div class="text-right">Playing Now</div>
+<body class="text-light">
+  <div class="container-fluid"> <!-- Main container -->
+    <div class="top-of-screen">
+      <div class="media">
+        <img class="align-self-start mr-3" src="/img/WinterClusterLogo_sm.png" alt="CQ Logo">
+      </div>
     </div>
-    <div class="col">
-      <div style="color:yellow">{{matches['current']['player1']}} </div>
-      <div style="color:blue">{{matches['current']['player2']}} <br/>
-    </div>
-  </div>
-</div>
-<div class=container>
-  <div class="row">
-    <div class="col">
-      <div class="text-right">Up Next</div>
-    </div>
-    <div class="col">
-      <div style="color:yellow">{{matches['next']['player1']}} </div>
-      <div style="color:blue">{{matches['next']['player2']}} <br/>
-    </div>
-  </div>
-</div>
-<div class=container>
-  <div class="row">
-    <div class="col">
-      <div class="text-right">And Then</div>
-    </div>
-    <div class="col">
-      <div style="color:yellow">{{matches['next2']['player1']}} </div>
-      <div style="color:blue">{{matches['next2']['player2']}} <br/>
-    </div>
-  </div>
-</div>
+    <div class="row col-12"><!-- Games table row -->
+      <table class="gamestable"><!-- Games coming up table -->
+        <tr>
+          <td class="tabletitle">Playing Now</td>
+          <td class="tablematches">
+            <span class="team2">{{matches['current']['player2']}}</span><br/>
+            <span class="team1">{{matches['current']['player1']}}</span>
+          </td>
+        </tr>
+        <tr>
+          <td class="tabletitle">Up Next</td>
+          <td class="tablematches">
+            <span class="team2">{{matches['next']['player1']}}</span><br/>
+            <span class="team1">{{matches['next']['player2']}}</span>
+          </td>
+        </tr>
+        <tr>
+          <td class="tabletitle">After that</td>
+          <td class="tablematches">
+            <span class="team2">{{matches['next2']['player1']}}</span><br/>
+            <span class="team1">{{matches['next2']['player2']}}</span>
+          </td>
+        </tr>
+      </table><!-- End games coming up table -->
+    </div><!-- End games table row -->
+
+    <div class="row bottom-left-align-parent"><!-- Run time row -->
+        <p class="bottom-left-align-child">
+          Started At: {{tournament['started_at']}} <br/>
+          Current Time: <span id="currenttime" /> <br/>
+          Duration: <span id="duration" />
+          <!-- Short script for getting current datetime. Dispays in place of above datime span -->
+          <script>
+            var options = {  
+              hour: "2-digit", minute: "2-digit"  
+            };
+            var dt = new Date();
+            document.getElementById("currenttime").innerHTML = dt.toLocaleString("en-us", options);
+          </script>
+        </p>
+    </div><!-- End Run time row -->
+  </div><!-- End main container -->
 
 
 
-Tournament:  {{tournament['name']}} <br/>
-Started At: {{tournament['started_at']}} <br/><br/>
-
-Current Time: <div id="datetime"> </time>
-<script>
-var dt = new Date();
-document.getElementById("datetime").innerHTML = dt.toLocaleString();
-</script>
-
-
-
-
-<!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js" integrity="sha384-a5N7Y/aK3qNeh15eJKGWxsqtnX/wWdSZSKp+81YjTmS15nvnvxKHuzaWwXHDli+4" crossorigin="anonymous"></script>
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js" integrity="sha384-a5N7Y/aK3qNeh15eJKGWxsqtnX/wWdSZSKp+81YjTmS15nvnvxKHuzaWwXHDli+4" crossorigin="anonymous"></script>
 </body>
 
 </html>

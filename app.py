@@ -14,7 +14,7 @@ def poller():
     asyncio.set_event_loop(loop)
 
     output = loop.run_until_complete(get_results(loop))
-
+    output['tournament']['started_at'] = output['tournament']['started_at'].strftime("%B %d, %I:%M %p")
     o = open('data.pkl', 'wb')
 
     pickle.dump(output, o)
