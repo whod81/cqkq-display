@@ -4,7 +4,8 @@ import pickle
 # from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.schedulers.background import BackgroundScheduler
 from flask import Flask, render_template, send_from_directory
-
+from dateutil.relativedelta import relativedelta
+from datetime import datetime, timedelta
 from utils.dashboard import get_results
 
 
@@ -63,7 +64,11 @@ def send_js(path):
 def hello(name=None):
     o = open('data.pkl', 'rb')
     output = pickle.load(o)
-
+    if (output['matches']['current']['started_at']):
+        datetime = output['matches']['current']['started_at'] + relativedelta(months=-1)# Subtract one month because JS starts counting months at 0. SMH
+        output['matches']['current']['started_at_for_js'] = datetime.strftime("%Y, %m, %d, %H, %M")
+    else:
+        output['matches']['current']['started_at_for_js'] = ""
     return render_template('index.html', name=name, tournament=output['tournament'], matches=output['matches'])
 
 @app.route('/player/<match>/<player>')

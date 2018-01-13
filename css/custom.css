@@ -1,7 +1,11 @@
 body {
     font-family: 'Lato', cursive;
     font-size: 120%;
-    background-color: #1d1d1d;
+    background: url(../img/gray-background.jpg) no-repeat center center fixed; 
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
 }
 
 .top-of-screen {
@@ -41,4 +45,14 @@ body {
 
 .team2 {
     color: #2366Ab
+}
+
+.duration {
+    font-size: 50%;
+    font-weight: normal;
+    color:#2366Ab;
+}
+
+#duration {
+    color:#bed7f1;
 }
