@@ -11,11 +11,7 @@ import dateutil.parser
 from dateutil import tz
 from pytz import timezone
 
-# Remove pkl file that tracks tournament_url
-try:
-    os.remove('data.pkl')
-except OSError:
-    pass
+
 
 
 def get_config():
@@ -184,7 +180,7 @@ async def get_unplayed_rounds(matches):
 
     if len(unfinished_rounds) < 1:
         return None
-        
+
     next_round = min(unfinished_rounds)
     return next_round
 
@@ -306,6 +302,7 @@ async def get_next_staggered_match_id(matches):
 def get_next_match(matches):
     # Will get the match with lowest id and is incomplete and save the object to next match
     incomplete_matches = []
+
     for m in matches:
         if m.completed_at is None:
             incomplete_matches.append(m)
@@ -315,7 +312,7 @@ def get_next_match(matches):
     if len(incomplete_matches) < 1:
         return None
 
-    next_match = min(incomplete_matches, key=attrgetter('id'))
+    next_match = min(incomplete_matches, key=attrgetter('suggested_play_order'))
     return next_match
 
 
@@ -536,6 +533,13 @@ async def get_results(loop):
     else:
         output["matches"]["current"]["started_at"] = fake_date
 
+
+    # At first I thought about passing how many seconds have passed since the games
+    # started but the poll only runs every X amount of time so i should just pass the
+    # time into the javascript and let it do the math there
+    # output["matches"]["current"]["duration_seconds"] = datetime.datetime.now(datetime.timezone.utc) - output["matches"]["current"]["started_at"]
+    # print(output["matches"]["current"]["duration_seconds"].seconds)
+
     if next_match_id is not None:
         for idx, v in enumerate(t_matches):
             if v.id == next_match.id:
@@ -710,7 +714,7 @@ async def get_results(loop):
             output["matches"]["next3"]["player2"] = ''
 
 
-
+    output['matches']['current']['started_at'] = output['matches']['current']['started_at'].isoformat()
     # So we have all the logic for getting matches, getting the next match, tournament details,
     # and participants detail. Now what?
 

@@ -15,14 +15,13 @@ def poller():
     asyncio.set_event_loop(loop)
 
     output = loop.run_until_complete(get_results(loop))
-    output['tournament']['started_at'] = output['tournament']['started_at'].strftime("%B %d, %I:%M %p")
     o = open('data.pkl', 'wb')
 
     pickle.dump(output, o)
 
 
 sched = BackgroundScheduler(daemon=True)
-sched.add_job(poller, 'interval', seconds=5)
+sched.add_job(poller, 'interval', seconds=10)
 sched.start()
 
 app = Flask(__name__, static_url_path='')
@@ -64,11 +63,6 @@ def send_js(path):
 def hello(name=None):
     o = open('data.pkl', 'rb')
     output = pickle.load(o)
-    if (output['matches']['current']['started_at']):
-        datetime = output['matches']['current']['started_at'] + relativedelta(months=-1)# Subtract one month because JS starts counting months at 0. SMH
-        output['matches']['current']['started_at_for_js'] = datetime.strftime("%Y, %m, %d, %H, %M")
-    else:
-        output['matches']['current']['started_at_for_js'] = ""
     return render_template('index.html', name=name, tournament=output['tournament'], matches=output['matches'])
 
 @app.route('/player/<match>/<player>')

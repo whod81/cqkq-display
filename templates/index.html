@@ -11,12 +11,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
-  
+
   <!-- Custom CSS -->
   <link rel="stylesheet" href="/css/custom.css">
 
   <!-- Google fonts -->
-  <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet"> 
+  <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
 
   <title>{{tournament['name']}}</title>
 </head>
@@ -34,7 +34,16 @@
           <td class="tabletitle">Playing Now<br/>
             <p class="duration">
               Current Match Duration<br/>
-              <span id="duration"></span>
+              <script type="text/javascript">
+                var d = new Date("{{matches['current']['started_at']}}");
+                var now = new Date();
+                var seconds = (now - d) / 1000;
+                var j = new Date(null);
+                j.setSeconds(seconds)
+                time_display = j.toISOString().substr(11, 8);
+                console.log(time_display)
+              </script>
+
             </p>
           </td>
           <td class="tablematches">
@@ -70,35 +79,11 @@
         <p class="bottom-left-align-child">
            <br/>
           Tournament Started At: {{tournament['started_at']}} <br/>
-          Current Time: <span id="currenttime"></span> 
+          Current Time: <span id="currenttime"></span>
         </p>
     </div><!-- End Run time row -->
   </div><!-- End main container -->
   <!-- Short script for getting current datetime. Dispays in place of above datime span -->
-  <script>
-    function update_match_duration() {
-      if ({{matches['current']['started_at_for_js']}} == "") {
-        document.getElementById("duration").innerHTML = "Match has not started";
-      } else {
-        var started_at = new Date({{matches['current']['started_at_for_js']}});
-        var current_time = new Date();
-
-        var started_at_ms = started_at.getTime();
-        var current_time_ms = current_time.getTime();
-        var time_diff_ms = current_time_ms - started_at_ms;
-
-        var minutes = (Math.floor(time_diff_ms / 60000)).toString();
-        var seconds = (((time_diff_ms % 60000) / 1000).toFixed(0)).toString();
-        document.getElementById("duration").innerHTML = minutes + ":" + seconds;
-      }
-    };
-    var options = {  
-      hour: "2-digit", minute: "2-digit"  
-    };
-    var dt = new Date();
-    document.getElementById("currenttime").innerHTML = dt.toLocaleString("en-us", options);
-    var timer = setInterval(update_match_duration, 1000);
-  </script>
 
 
   <!-- Optional JavaScript -->
