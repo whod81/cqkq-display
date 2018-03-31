@@ -1,0 +1,40 @@
+body {
+    background-color: #063c53;
+}
+
+.form-parent {
+    font-family: 'Noto Sans', sans-serif;
+    background-color: #73aca7;
+    margin-top: 10%;
+    padding: 3% 5% 3% 5%;
+    font-size: 1.3em;
+    border-radius: 10px;
+    box-shadow: 10px 10px 2px black;
+    border-style: solid;
+    border-color: #136572;
+}
+
+.form-parent h2 {
+    text-align: center;
+    font-weight: 700;
+}
+
+input[type="radio"] {
+    -ms-transform: scale(1.3); /* IE 9 */
+    -webkit-transform: scale(1.3); /* Chrome, Safari, Opera */
+    transform: scale(1.3);
+    margin: 2px 2px 2px 2px;
+}
+
+.custom-button {
+    background-color: #063c53;
+    border-color: #d8e1cf;
+    font-weight: 700;
+    font-size: 1em;
+}
+.custom-button:hover,
+.custom-button:focus,
+.custom-button:active {
+    background-color: #136572;
+    border-color: #d8e1cf;
+}

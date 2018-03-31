@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <!-- refresh -->
+  <meta http-equiv="refresh" content="20" >
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <!-- Bootstrap CSS -->
+  <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous"> -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="/css/config.css">
+
+  <!-- Google fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet">
+  <script>
+  $(document).ready( function(){
+      if ( "{{pool_type}}" == "staggered" ){
+        $(".form-check-input[value=staggered]").prop("checked", true);
+      }
+      else {
+        $(".form-check-input[value=NotStaggered]").prop("checked", true);
+      }
+  });
+  </script>
+  <title>CQKQ-Display Config</title>
+</head>
+<body class="container">
+    <div class="form-parent">
+        <h2>The Configurator</h2>
+        <form action="/config" method="POST">
+            <div class="form-group">
+                <label for="username">Challonge Username:</label>
+                <input name="username" type="text" value={{username}} class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="api_key">Challonge API Key:</label>
+                <input name="api_key" type="text" value={{api_key}} class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="tournament_url">Challonge Tournament (Last segment of tournament's URL):</label>
+                <input name="tournament_url" type="text" value={{tournament_url}} class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="timezone">Your timezone (Abbreviated):</label>
+                <input name="timezone" type="text" class="form-control" value="{{timezone}}">
+            </div>
+            <div class="form-group">
+                <label for="pool">Type of tournament pool:</label><br/>
+                <input name="pool" type="radio" value="staggered" class="form-check-input">Staggered <br/>
+                <input name="pool" type="radio" value="NotStaggered" class="form-check-input">Not Staggered <br/>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block custom-button">Submit Configuration Changes</button>
+        </form>
+    </div>
+
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js" integrity="sha384-a5N7Y/aK3qNeh15eJKGWxsqtnX/wWdSZSKp+81YjTmS15nvnvxKHuzaWwXHDli+4" crossorigin="anonymous"></script>
+</body>
+
+</html>
