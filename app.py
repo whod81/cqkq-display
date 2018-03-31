@@ -3,10 +3,10 @@ import pickle
 
 # from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.schedulers.background import BackgroundScheduler
-from flask import Flask, render_template, send_from_directory
+from flask import Flask, render_template, send_from_directory, request, redirect
 from dateutil.relativedelta import relativedelta
 from datetime import datetime, timedelta
-from utils.dashboard import get_results
+from utils.dashboard import get_results, get_config, update_config
 
 
 def poller():
@@ -95,6 +95,21 @@ def print_player(match, player):
 
     return render_template('player.html', player=player, player_name=player_name)
 
+@app.route('/config', methods=['GET', 'POST'])
+def configurate():
+    if request.method == 'POST':
+        update_config(request.form["username"], request.form["api_key"], request.form["tournament_url"], request.form["timezone"], request.form["pool"])
+        return redirect('http://localhost:5000/config', code=302)
+    else:
+        config = get_config()
+        template_variables = {
+            'username': config['challonge']['username'],
+            'api_key': config['challonge']['api_key'],
+            'tournament_url': config['challonge']['tournament_url'],
+            'timezone': config['system']['timezone'],
+            'pool_type': config['order']['pool']
+        }
+        return render_template('config.html', **template_variables)
 
 @app.after_request
 def add_header(response):

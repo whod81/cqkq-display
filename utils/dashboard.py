@@ -20,6 +20,17 @@ def get_config():
         config = json.load(json_data_file)
     return config
 
+def update_config(username, api_key, tournament_url, timezone, pool_type):
+    with open('config.json', 'r+') as json_data_file:
+        config = json.load(json_data_file)
+        config['challonge']['username'] = username
+        config['challonge']['api_key'] = api_key
+        config['challonge']['tournament_url'] = tournament_url
+        config['system']['timezone'] = timezone
+        config['order']['pool'] = pool_type
+        json_data_file.seek(0)  # Move cursor to beginning
+        json.dump(config, json_data_file)
+        json_data_file.truncate()  # Remove everything after cursor
 
 config = get_config()
 
