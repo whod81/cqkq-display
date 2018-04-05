@@ -32,19 +32,42 @@
       <table class="gamestable"><!-- Games coming up table -->
         <tr>
           <td class="tabletitle">Playing Now<br/>
-            <p class="duration">
-              Current Match Duration<br/>
+              <div id="match-duration">
               <script type="text/javascript">
-                var d = new Date("{{matches['current']['started_at']}}");
-                var now = new Date();
-                var seconds = (now - d) / 1000;
-                var j = new Date(null);
-                j.setSeconds(seconds)
-                time_display = j.toISOString().substr(11, 8);
-                console.log(time_display)
-              </script>
+                var matchStartDate = new Date("{{matches['current']['started_at']}}").getTime();
 
-            </p>
+                function matchtimer() {
+                    // Update the count down every 1 second
+
+
+                    // Get todays date and time
+                    var now = new Date().getTime();
+
+                    // Find the distance between now and when the match started
+                    var distance =  now - matchStartDate;
+
+                    // Time calculations for days, hours, minutes and seconds
+                    var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    hours = hours.toString().padStart(2,"0");
+                    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                    minutes = minutes.toString().padStart(2,"0");
+                    var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                    seconds = seconds.toString().padStart(2,"0");
+
+                    // Output the result in an element with id="match-duration"
+                    if (hours > 0) {
+                      document.getElementById("match-duration").innerHTML = hours + ":" + minutes + ":" + seconds ;
+                    } else {
+                      document.getElementById("match-duration").innerHTML = minutes + ":" + seconds ;
+                    }
+
+                    setTimeout(matchtimer, 1000);
+
+                }
+                matchtimer();
+                </script>
+
+
           </td>
           <td class="tablematches">
             <span class="team2">{{matches['current']['player1']}}</span><br/>

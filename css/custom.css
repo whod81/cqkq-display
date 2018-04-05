@@ -1,7 +1,7 @@
 body {
     font-family: 'Lato', cursive;
     font-size: 120%;
-    background:  no-repeat center center fixed; 
+    background:  no-repeat center center fixed;
     background-color: black;
     -webkit-background-size: cover;
     -moz-background-size: cover;
@@ -10,7 +10,7 @@ body {
 }
 
 .top-of-screen {
-    height: 17vh;
+    height: 13vh;
 }
 
 .gamestable {
@@ -48,12 +48,9 @@ body {
     color: #2366Ab
 }
 
-.duration {
+
+#match-duration {
     font-size: 50%;
     font-weight: normal;
-    color:#2366Ab;
-}
-
-#duration {
-    color:#bed7f1;
+    color:#bed7f1
 }
