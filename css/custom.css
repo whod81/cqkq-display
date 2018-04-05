@@ -1,7 +1,8 @@
 body {
     font-family: 'Lato', cursive;
     font-size: 120%;
-    background: url(../img/gray-background.jpg) no-repeat center center fixed; 
+    background:  no-repeat center center fixed; 
+    background-color: black;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -14,7 +15,7 @@ body {
 
 .gamestable {
     margin: auto;
-    font-size: 235%;
+    font-size: 250%;
     font-weight: bold;
 }
 
