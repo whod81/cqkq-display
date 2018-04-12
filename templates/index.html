@@ -50,12 +50,12 @@
                     var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                     hours = hours.toString().padStart(2,"0");
                     var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                    minutes = minutes.toString().padStart(2,"0");
                     var seconds = Math.floor((distance % (1000 * 60)) / 1000);
                     seconds = seconds.toString().padStart(2,"0");
 
                     // Output the result in an element with id="match-duration"
                     if (hours > 0) {
+                      minutes = minutes.toString().padStart(2,"0");
                       document.getElementById("match-duration").innerHTML = hours + ":" + minutes + ":" + seconds ;
                     } else {
                       document.getElementById("match-duration").innerHTML = minutes + ":" + seconds ;
@@ -109,6 +109,7 @@
                var tournamentStartDate = new Date("{{tournament['started_at']}}");
 
                var hours = tournamentStartDate.getHours();
+
                var minutes = tournamentStartDate.getMinutes();
                minutes = minutes.toString().padStart(2,"0");
                var ampm = hours >= 12 ? 'PM' : 'AM';
@@ -127,7 +128,7 @@
          </script>
 
          </span><br/>
-          Current Time: <span id="currenttime">
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Current Time: <span id="currenttime">
 
           <script type="text/javascript">
 

@@ -50,7 +50,22 @@ body {
 
 
 #match-duration {
-    font-size: 50%;
+    font-size: 100%;
+    font-weight: normal;
+    color:#bed7f1
+}
+
+#currenttime {
+    font-family:  "Lucida Sans Typewriter", "Lucida Typewriter", "Courier New", Courier, monospace;
+    font-size: 100%;
+    font-weight: normal;
+    color:#bed7f1
+}
+
+
+#tournamentstart {
+    font-family: "Lucida Sans Typewriter", "Lucida Typewriter", "Courier New", Courier, monospace;
+    font-size: 100%;
     font-weight: normal;
     color:#bed7f1
 }
