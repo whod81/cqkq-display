@@ -101,8 +101,61 @@
     <div class="row bottom-left-align-parent"><!-- Run time row -->
         <p class="bottom-left-align-child">
            <br/>
-          Tournament Started At: {{tournament['started_at']}} <br/>
-          Current Time: <span id="currenttime"></span>
+           Tournament Start: <span id="tournamentstart">
+
+           <script type="text/javascript">
+
+             function tournamenttimer() {
+               var tournamentStartDate = new Date("{{tournament['started_at']}}");
+
+               var hours = tournamentStartDate.getHours();
+               var minutes = tournamentStartDate.getMinutes();
+               minutes = minutes.toString().padStart(2,"0");
+               var ampm = hours >= 12 ? 'PM' : 'AM';
+
+               hours = hours % 12;
+               hours = hours ? hours : 12; // the hour '0' should be '12'
+
+               // Output the result in an element with id="match-duration"
+               document.getElementById("tournamentstart").innerHTML = hours + ":" + minutes + ' ' + ampm;
+
+               setTimeout(tournamenttimer, 1000);
+
+             }
+         tournamenttimer();
+
+         </script>
+
+         </span><br/>
+          Current Time: <span id="currenttime">
+
+          <script type="text/javascript">
+
+            function clock() {
+                // Show the current time
+
+
+                // Get todays date and time
+                var today = new Date();
+                var hours = today.getHours();
+                var minutes = today.getMinutes();
+                minutes = minutes.toString().padStart(2,"0");
+                var ampm = hours >= 12 ? 'PM' : 'AM';
+
+                hours = hours % 12;
+                hours = hours ? hours : 12; // the hour '0' should be '12'
+
+                // Output the result in an element with id="match-duration"
+                document.getElementById("currenttime").innerHTML = hours + ":" + minutes + ' ' + ampm ;
+
+                setTimeout(clock, 1000);
+
+            }
+            clock();
+            </script>
+
+          </span>
+
         </p>
     </div><!-- End Run time row -->
   </div><!-- End main container -->
