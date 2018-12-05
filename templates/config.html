@@ -54,9 +54,11 @@
                 <input name="timezone" type="text" class="form-control" value="{{timezone}}">
             </div>
             <div class="form-group">
-                <label for="pool">Type of tournament pool:</label><br/>
-                <input name="pool" type="radio" value="staggered" class="form-check-input">Staggered <br/>
-                <input name="pool" type="radio" value="NotStaggered" class="form-check-input">Not Staggered <br/>
+                <label for="pool">Round Robin Schedule:</label><br/>
+                <input name="pool" type="radio" value="staggered" class="form-check-input">Staggered Pools<br/>
+                <input name="pool" type="radio" value="rounds" class="form-check-input">By Round<br/>
+                <input name="pool" type="radio" value="pools" class="form-check-input">Sequential Pools<br/>
+
             </div>
             <button type="submit" class="btn btn-primary btn-block custom-button">Submit Configuration Changes</button>
         </form>

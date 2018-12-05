@@ -218,6 +218,23 @@ async def get_next_round_match_id(matches):
     next_match_id = min(unplayed_in_round)
     return next_match_id
 
+async def get_next_pools_match_id(matches):
+    # Will get the match with lowest id and is incomplete and save the object to next match
+    incomplete_matches = []
+
+    for m in matches:
+        if m.completed_at is None:
+            incomplete_matches.append(m)
+
+    # It might be that there are no matches left.
+
+    if len(incomplete_matches) < 1:
+        return None
+
+
+
+    next_match = min(incomplete_matches, key=attrgetter('id'))
+    return next_match.id
 
 
 # Ryan's magic function. Returns the next match id in a staggered group scenario
@@ -494,10 +511,25 @@ async def get_results(loop):
         else:
             next_match_id = current_match_id
             next_match = await t.get_match(next_match_id)
+
     elif (config["order"]["pool"] == "rounds" and t.state == "group_stages_underway"):
         current_match_id = await get_current_match_id(t_matches)
         if (current_match_id is None):
             next_match_id = await get_next_round_match_id(t_matches)
+            if next_match_id is not None:
+                next_match = await t.get_match(next_match_id)
+            else:
+                # I think this means tournament is completed
+                # or at final match
+                completed = True
+        else:
+            next_match_id = current_match_id
+            next_match = await t.get_match(next_match_id)
+
+    elif (config["order"]["pool"] == "pools" and t.state == "group_stages_underway"):
+        current_match_id = await get_current_match_id(t_matches)
+        if (current_match_id is None):
+            next_match_id = await get_next_pools_match_id(t_matches)
             if next_match_id is not None:
                 next_match = await t.get_match(next_match_id)
             else:
@@ -578,6 +610,18 @@ async def get_results(loop):
             output["matches"]["next"]["id"] = None
             output["matches"]["next"]["player1"] = ''
             output["matches"]["next"]["player2"] = ''
+    elif (config["order"]["pool"] == "pools" and t.state == "group_stages_underway"):
+        next_match_id = await get_next_pools_match_id(t_matches)
+        if next_match_id is not None:
+            next_match = await t.get_match(next_match_id)
+            output["matches"]["next"]["id"] = next_match.id
+            output["matches"]["next"]["player1"] = p_list[next_match.player1_id]
+            output["matches"]["next"]["player2"] = p_list[next_match.player2_id]
+        else:
+            output["matches"]["next"]["id"] = None
+            output["matches"]["next"]["player1"] = ''
+            output["matches"]["next"]["player2"] = ''
+
     else:
         next_match = get_next_match(t_matches)
         if next_match is not None:
@@ -639,6 +683,22 @@ async def get_results(loop):
             else:
                 output["matches"]["next2"]["player2"] = p_list[next_match.player2_id]
 
+    elif (config["order"]["pool"] == "pools" and t.state == "group_stages_underway"):
+        next_match_id = await get_next_pools_match_id(t_matches)
+        if next_match_id is not None:
+            next_match = await t.get_match(next_match_id)
+            output["matches"]["next2"]["id"] = next_match.id
+            if next_match.player1_id is None:
+                output["matches"]["next2"]["player1"] = 'TBD'
+            else:
+                output["matches"]["next2"]["player1"] = p_list[next_match.player1_id]
+
+            if next_match.player2_id is None:
+                output["matches"]["next2"]["player2"] = 'TBD'
+            else:
+                output["matches"]["next2"]["player2"] = p_list[next_match.player2_id]
+
+
         else:
             output["matches"]["next2"]["id"] = None
             output["matches"]["next2"]["player1"] = ''
@@ -687,6 +747,7 @@ async def get_results(loop):
             output["matches"]["next3"]["id"] = None
             output["matches"]["next3"]["player1"] = ''
             output["matches"]["next3"]["player2"] = ''
+
     elif (config["order"]["pool"] == "rounds" and t.state == "group_stages_underway"):
         next_match_id = await get_next_round_match_id(t_matches)
         if next_match_id is not None:
@@ -705,6 +766,26 @@ async def get_results(loop):
             output["matches"]["next3"]["id"] = None
             output["matches"]["next3"]["player1"] = ''
             output["matches"]["next3"]["player2"] = ''
+
+    elif (config["order"]["pool"] == "pools" and t.state == "group_stages_underway"):
+        next_match_id = await get_next_pools_match_id(t_matches)
+        if next_match_id is not None:
+            next_match = await t.get_match(next_match_id)
+            output["matches"]["next3"]["id"] = next_match.id
+            if next_match.player1_id is None:
+                output["matches"]["next3"]["player1"] = 'TBD'
+            else:
+                output["matches"]["next3"]["player1"] = p_list[next_match.player1_id]
+
+            if next_match.player2_id is None:
+                output["matches"]["next3"]["player2"] = 'TBD'
+            else:
+                output["matches"]["next3"]["player2"] = p_list[next_match.player2_id]
+        else:
+            output["matches"]["next3"]["id"] = None
+            output["matches"]["next3"]["player1"] = ''
+            output["matches"]["next3"]["player2"] = ''
+
 
     else:
         try:
