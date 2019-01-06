@@ -47,6 +47,11 @@ def send_fonts(path):
 def send_img(path):
     return send_from_directory('img', path)
 
+@app.route('/teams/<path:path>')
+def send_teams(path):
+    return send_from_directory('teams', path)
+
+
 
 @app.route('/js/<path:path>')
 def send_js(path):
@@ -64,6 +69,36 @@ def hello(name=None):
     o = open('data.pkl', 'rb')
     output = pickle.load(o)
     return render_template('index.html', name=name, tournament=output['tournament'], matches=output['matches'])
+
+@app.route('/pictures/<match>/<player>')
+def print_imgpage(match, player):
+    o = open('data.pkl', 'rb')
+    output = pickle.load(o)
+
+    if match == "current":
+        if player == '1':
+            player_name = output['matches']['current']['player1']
+        elif player == '2':
+            player_name = output['matches']['current']['player2']
+    elif match == "next":
+        if player == '1':
+            player_name = output['matches']['next']['player1']
+        elif player == '2':
+            player_name = output['matches']['next']['player2']
+    elif match == "next2":
+        if player == '1':
+            player_name = output['matches']['next2']['player1']
+        elif player == '2':
+            player_name = output['matches']['next2']['player2']
+    elif match == "next3":
+        if player == '1':
+            player_name = output['matches']['next3']['player1']
+        elif player == '2':
+            player_name = output['matches']['next3']['player2']
+    else:
+        player_name = "ERROR"
+
+    return render_template('pictures.html', player=player, team_name=player_name)
 
 @app.route('/player/<match>/<player>')
 def print_player(match, player):
