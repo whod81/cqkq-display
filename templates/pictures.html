@@ -27,7 +27,11 @@
 </div>
 
 <div id="playingsoon">
-  <img src="/img/playing_now.png">
+  {% if match == 'current' %}
+      <img src="/img/playing_now.png">
+  {% else %}
+      <img src="/img/playing_soon.png">
+  {% endif %}
 </div>
 <div id="softbox1">
 

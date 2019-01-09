@@ -112,6 +112,7 @@ def print_imgpage(match):
 
 
     # I mean I could have written a function but I'm sorta into copy/paste.
+
     team1_name_without_scene = team1_name.split(sep, 1)[0];
     path="teams/" + team1_name_without_scene;
     print(path);
@@ -148,7 +149,7 @@ def print_imgpage(match):
         print("Having trouble finding team images:" + path)
 
 
-    return render_template('pictures.html', team1_name=team1_name, team2_name=team2_name, team1_players=team1_players, team2_players=team2_players,team1_images=team1_images, team2_images=team2_images)
+    return render_template('pictures.html', match=match, team1_name=team1_name, team2_name=team2_name, team1_players=team1_players, team2_players=team2_players,team1_images=team1_images, team2_images=team2_images)
 
 @app.route('/player/<match>/<player>')
 def print_player(match, player):
