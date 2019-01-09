@@ -1,0 +1,147 @@
+
+
+body#pictures  {
+  background:  no-repeat center center fixed;
+  background-image: linear-gradient(to  right, #56487d, #f4c7fc);
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+
+}
+
+#wc2logo {
+  position: absolute;
+  top: 25px;
+  margin-left: 40px;
+}
+
+#playingsoon {
+  position: absolute;
+  top: 90px;
+  width:1920px;
+
+}
+
+#playingsoon img {
+  float: right;
+}
+
+
+#softbox1 {
+  position: absolute;
+  border-radius: 25px;
+  background: #000000;
+  width: 1775px;
+  top: 200px;
+  left: 65px;
+  height: 375px;
+  font-family:  "Lucida Handwriting Italic", "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Geneva, Verdana, sans-serif;
+  color: white;
+
+}
+
+#softbox2 {
+  position: absolute;
+  border-radius: 25px;
+  background: #000000;
+  width: 1775px;
+  top: 690px;
+  left: 65px;
+  height: 375px;
+  font-family:  "Lucida Handwriting Italic", "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Geneva, Verdana, sans-serif;
+  color: white;
+
+}
+
+
+
+#vs {
+  position: absolute;
+  top: 580px;
+  width:1920px;
+}
+
+#vs img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+
+.teamname {
+  width: 1790px;
+  height: 40px;s
+  font-family:  "Lucida Handwriting Italic",, "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Geneva, Verdana, sans-serif;
+  color: white;
+  font-size: 32px;
+  text-align: center;
+}
+
+.playername {
+  position: absolute;
+  height: 60px;
+  width: 240px;
+  top: 45px;
+  font-family:  "Lucida Handwriting Italic", "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Geneva, Verdana, sans-serif;
+  font-size: 24px;
+  vertical-align: text-bottom	;
+  text-align: center ;
+  color: white;
+  display: flex;
+justify-content: center;
+align-items: flex-end;
+
+}
+
+.playerpic {
+  position: absolute;
+  bottom:25px;
+  height: 240px;
+  width: 240px;
+  font-size: 24px;
+  text-align: center;
+  align: center;
+  vertical-align: text-bottom	;
+  white-space: nowrap;
+  color: white;
+  overflow: hidden;
+
+}
+
+
+.playerpic img  {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  max-height: 100%;
+  max-width: auto;
+
+
+}
+
+
+#player1 {
+  position: absolute;
+  left: 25px;
+}
+
+#player2 {
+  position: absolute;
+  left: 395px;
+}
+
+#player3 {
+  position: absolute;
+  left: 765px;
+}
+
+#player4 {
+  position: absolute;
+  left: 1135px;
+}
+
+#player5 {
+  position: absolute;
+  left: 1505px;
+}

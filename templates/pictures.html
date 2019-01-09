@@ -1,1 +1,77 @@
-<img src="/teams/{{team_name}}/1.jpg" height=828 width=465>
+
+<!doctype html>
+<html lang="en">
+<head>
+  <!-- refresh -->
+  <meta http-equiv="refresh" content="300" >
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="/css/team_picture.css">
+
+  <!-- Google fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+
+</head>
+<body id="pictures">
+
+<div id="wc2logo">
+<img src="/img/Winter_Cluster_Lucida_Handwriting_Italic.png">
+</div>
+
+<div id="playingsoon">
+  <img src="/img/playing_now.png">
+</div>
+<div id="softbox1">
+
+<div class="teamname">{{ team1_name }}</div>
+
+
+{% for number,player_name in team1_players.items() %}
+
+<div class="playername" id="player{{ number }}">{{ player_name }}</div>
+<div class="playerpic" id="player{{ number }}">
+
+<img src="{{ team1_images[player_name] }}" ALT="{{ player_name }}" >
+</div>
+
+
+{% endfor %}
+
+
+
+
+</div>
+
+<div id="vs">
+<img src="/img/vs.png">
+</div>
+
+
+<div id="softbox2">
+
+<div class="teamname">{{ team2_name }}</div>
+
+
+{% for number,player_name in team2_players.items() %}
+
+<div class="playername" id="player{{ number }}">{{ player_name }}</div>
+<div class="playerpic" id="player{{ number }}"">
+<img src="{{ team2_images[player_name] }}" ALT="{{ player_name }}">
+</div>
+
+
+{% endfor %}
+
+
+
+</div>
+
+</body>
