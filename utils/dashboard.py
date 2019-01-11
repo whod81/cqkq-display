@@ -417,7 +417,7 @@ async def get_results(loop):
     # Okay this is so stupid at this point this was the original logic which was very function heavy
     # cuz i was the only one working on it but now its just painful.
 
-    output = { 'tournament' : {}, 'matches' : { 'last' : {}, 'current' : {}, 'next' : {}, 'next2' : {}, 'next3' : {} }}
+    output = { 'tournament' : {}, 'teams' : {}, 'matches' : { 'last' : {}, 'current' : {}, 'next' : {}, 'next2' : {}, 'next3' : {} }}
 
     # Grab the tournament. See function above.
     t = await get_tourney()
@@ -462,6 +462,8 @@ async def get_results(loop):
     p_list =  get_participants_list(participants)
     if t.state == "group_stages_underway":
         p_list = group_p_list
+
+    output["teams"] = p_list
 
     next_match_id = None
     last_match = await get_last_completed_match_id(t_matches)

@@ -8,7 +8,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from flask import Flask, render_template, send_from_directory, request, redirect
 from dateutil.relativedelta import relativedelta
 from datetime import datetime, timedelta
-from utils.dashboard import get_results, get_config, update_config
+from utils.dashboard import get_results, get_config, update_config, get_tourney, get_participants_list
 from pathlib import Path;
 
 
@@ -74,6 +74,47 @@ def hello(name=None):
     output = pickle.load(o)
     return render_template('index.html', name=name, tournament=output['tournament'], matches=output['matches'])
 
+@app.route('/teamlist')
+def teamlist():
+    o = open('data.pkl', 'rb')
+    output = pickle.load(o)
+    teams = []
+
+    sep = ' ('
+
+
+    for team in output['teams'].values():
+        team = team.split(sep, 1)[0];
+        teams.append(team)
+
+    return render_template('teamlist.html', teams=teams)
+
+
+@app.route('/teamoverview/<path:team>')
+def teamoverview(team):
+    team_images = {}
+    team_players = {}
+
+    ValidExts = ['.JPG','.JPEG','.PNG']
+
+    path="teams/" + team;
+
+    if os.path.isdir(path):
+        for count, filename in enumerate(sorted(os.listdir(path)), start=1):
+            if count > 5:
+                break;
+            suffix = Path(filename).suffix;
+            player_name = filename.replace(suffix,'')
+            team_players[count] = player_name;
+            if suffix.upper() in ValidExts:
+                team_images[player_name] = "/teams/" + team + '/' + filename;
+    else:
+        print("Having trouble finding team images:" + path)
+
+
+    return render_template('teamoverview.html', team_name=team, team_images=team_images,team_players=team_players)
+
+
 @app.route('/pictures/<match>')
 def print_imgpage(match):
     o = open('data.pkl', 'rb')
@@ -115,7 +156,6 @@ def print_imgpage(match):
 
     team1_name_without_scene = team1_name.split(sep, 1)[0];
     path="teams/" + team1_name_without_scene;
-    print(path);
 
     if os.path.isdir(path):
         for count, filename in enumerate(sorted(os.listdir(path)), start=1):

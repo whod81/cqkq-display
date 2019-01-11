@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <!-- refresh -->
+  <meta http-equiv="refresh" content="300" >
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="/css/team_picture.css">
+
+  <!-- Google fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+
+</head>
+<body id="pictures">
+  <div id="softbox1">
+
+  <div class="teamname">{{ team_name }}</div>
+
+
+{% for number,player_name in team_players.items() %}
+
+<div class="playername" id="player{{ number }}">{{ player_name }}</div>
+<div class="playerpic" id="player{{ number }}">
+
+<img src="{{ team_images[player_name] }}" ALT="{{ player_name }}" >
+</div>
+
+
+{% endfor %}
