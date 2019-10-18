@@ -19,7 +19,7 @@ pytz==2017.3
 requests==2.18.4
 six==1.11.0
 tzlocal==1.5.1
-urllib3==1.22
+urllib3==1.24.2
 virtualenv==15.0.3
 Werkzeug==0.11.10
 yarl==0.16.0
