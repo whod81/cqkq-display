@@ -1,5 +1,5 @@
 achallonge==1.6.1
-aiohttp==2.3.1
+aiohttp==3.7.4
 APScheduler==3.4.0
 async-timeout==2.0.0
 autoenv==1.0.0
